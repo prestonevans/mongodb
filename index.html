@@ -10,15 +10,30 @@
         <script defer src="js/app.js"></script>
 </head>
 <body>
-    <header>
-        <nav>
-        </nav>
-    </header>
-    <main>
-        <h1>Preston Jay</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt, vero.</p>
-    </main>
-    <footer>
-    </footer>
+    <form action="/newUser" method="post">
+        <input required name="firstName" type="text" placeholder="First Name" >
+        <input required name="lastName" type="text" placeholder="Last Name">
+        <input required type="email" name="emailAddress" placeholder="Email">
+        <input required type="number" name="age" placeholder="Age" >
+        <input required type="text" name="role" placeholder="Role">
+        <input required type="password" name="password" placeholder="Password">
+        <input type="submit" value="Add User">
+    </form>
+    <a href="/users">Show Users</a>
+    <a href="/sortA-Z">Sort Users A-Z</a>
+    <a href="/sortZ-A">Sort Users Z-A</a>
+    <form action="/removeUser" method="post">
+        <input required type="text" name="name" placeholder="First Name">
+        <input type="submit" value="Delete User">
+    </form>
+    <form action="/updateUserRole" method="post">
+        <input required type="text" name="name" placeholder="First Name">
+        <input required type="text" name="role" placeholder="Update Role">
+        <input type="submit" value="Update Role">
+    </form>
+    <form action="/searchByFirst" method="post">
+        <input required type="text" name="name" placeholder="First Name">
+        <input type="submit" value="Search By First Name">
+    </form>
 </body>
 </html>
