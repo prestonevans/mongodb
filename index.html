@@ -7,33 +7,41 @@
         <title>Preston Jay</title>
         <script src="https://kit.fontawesome.com/ad835ba750.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="css/style.css">
-        <script defer src="js/app.js"></script>
 </head>
 <body>
-    <form action="/newUser" method="post">
-        <input required name="firstName" type="text" placeholder="First Name" >
-        <input required name="lastName" type="text" placeholder="Last Name">
-        <input required type="email" name="emailAddress" placeholder="Email">
-        <input required type="number" name="age" placeholder="Age" >
-        <input required type="text" name="role" placeholder="Role">
-        <input required type="password" name="password" placeholder="Password">
-        <input type="submit" value="Add User">
-    </form>
-    <a href="/users">Show Users</a>
-    <a href="/sortA-Z">Sort Users A-Z</a>
-    <a href="/sortZ-A">Sort Users Z-A</a>
-    <form action="/removeUser" method="post">
-        <input required type="text" name="name" placeholder="First Name">
-        <input type="submit" value="Delete User">
-    </form>
-    <form action="/updateUserRole" method="post">
-        <input required type="text" name="name" placeholder="First Name">
-        <input required type="text" name="role" placeholder="Update Role">
-        <input type="submit" value="Update Role">
-    </form>
-    <form action="/searchByFirst" method="post">
-        <input required type="text" name="name" placeholder="First Name">
-        <input type="submit" value="Search By First Name">
-    </form>
+    <main>
+        <form action="/newUser" method="post">
+            <h2>Add User</h2>
+            <input required name="firstName" type="text" placeholder="First Name" >
+            <input required name="lastName" type="text" placeholder="Last Name">
+            <input required type="email" name="emailAddress" placeholder="Email">
+            <input required type="number" name="age" placeholder="Age" >
+            <input required type="text" name="role" placeholder="Role">
+            <input required type="password" name="password" placeholder="Password">
+            <input type="submit" value="Add User">
+        </form>
+        <div class="sort">
+            <h2>Sort Users</h2>
+            <a href="/users">Show Users</a>
+            <a href="/sortA-Z">Sort Users A-Z</a>
+            <a href="/sortZ-A">Sort Users Z-A</a>
+        </div>
+        <form action="/removeUser" method="post">
+            <h2>Remove User</h2>
+            <input required type="text" name="name" placeholder="First Name">
+            <input type="submit" value="Delete User">
+        </form>
+        <form action="/updateUserRole" method="post">
+            <h2>Update User</h2>
+            <input required type="text" name="name" placeholder="First Name">
+            <input required type="text" name="role" placeholder="Update Role">
+            <input type="submit" value="Update Role">
+        </form>
+        <form action="/searchByFirst" method="post">
+            <h2>Search Users</h2>
+            <input required type="text" name="name" placeholder="First Name">
+            <input type="submit" value="Search By First Name">
+        </form>
+    </main>
 </body>
 </html>

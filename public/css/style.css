@@ -1,0 +1,71 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+:root {
+	--primary: hsl(182, 25%, 50%);
+	--primary-dark: hsl(182, 25%, 20%);
+	--secondary: hsl(0, 0%, 100%);
+  --transition: .2s ease-in;
+}
+
+body {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	background-color: cadetblue;
+}
+form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	max-width: 20rem;
+	margin: 0 auto;
+}
+.sort {
+	max-width: 20rem;
+	margin: 0 auto 1rem;
+}
+.sort a {
+	text-decoration: none;
+  color: var(--secondary);
+  transition: color var(--transition);
+}
+.sort a:not(:last-child) {
+  margin-right: .5em;
+}
+.sort a:hover,
+.sort a:focus {
+  color: var(--primary-dark);
+}
+form input {
+	margin-bottom: 1rem;
+	padding: .5em 2em;
+	border: 0;
+	border-radius: 2em;
+	font-size: 1rem;
+  transition: transform var(--transition)
+}
+input:focus,
+a:focus {
+	outline: none;
+}
+input:not([type='submit']):focus,
+input:not([type='submit']):active {
+	transform: scale(1.05);
+}
+input[type='submit'] {
+  transition: all var(--transition);
+}
+input[type='submit']:focus,
+input[type='submit']:hover {
+	background-color: var(--primary-dark);
+	color: white;
+	cursor: pointer;
+}
+h2 {
+	align-self: flex-start;
+	color: var(--primary-dark);
+	margin-bottom: 1rem;
+}

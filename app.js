@@ -8,6 +8,7 @@ const path = require("path");
 app.get('/',(req,res) => { 
   res.sendFile(path.join(__dirname+'/index.html')); 
 }); 
+app.use(express.static(__dirname + '/public'));
 
 const db = 'mongodb://localhost/Test'
 mongoose.connect(db, {useNewUrlParser: true, useUnifiedTopology: true,})
@@ -29,6 +30,7 @@ const userSchema = new mongoose.Schema({
     password: String,
     createdDate: { type: Date, default: Date.now}
 })
+
 const collectionName = 'user'
 const user = mongoose.model('User',userSchema, collectionName)
 
@@ -45,8 +47,7 @@ app.post('/newUser', (req, res) => {
         if (err) {
             return console.error(err)
         }
-        console.log(`new user save: ${data}`)
-        res.send(`${newUser.firstName} has been added to the database <a href='/'>Home</a>`)
+        res.send(`${newUser.firstName} has been added to the database <a href='/'>Back</a>`)
     })
 })
 
@@ -55,7 +56,6 @@ app.get("/user", (req, res) =>{
         if (err) return console.log(`Oops! ${err}`);
         //You can access the result from the call back function  
         let result = JSON.stringify(data);
-        console.log(`data = ${result}`);
         res.send(result);
     });
 })
@@ -63,62 +63,71 @@ app.get("/user", (req, res) =>{
 app.post('/searchByFirst', async (req, res) => {
     const search = req.body.name;
     try {
-        const results = await user.find({firstName: search})
-        console.log(results)
+        const results = await user.find({firstName: search}).collation( { locale: 'en', strength: 2 } )
         res.send(results.length !== 0 ? JSON.stringify(results) : 'No results found')
     } catch {
         res.send('Ooops')
     }
 })
 
- app.post('/updateUserRole', (req, res) => {
-    console.log(`POST /updateUserRole: ${JSON.stringify(req.body)}`);
-    let matchedName = req.body.name;
-    let newrole = req.body.role;
-    user.findOneAndUpdate( {name: matchedName}, {role: newrole},
-        { new: true }, //return the updated version instead of the pre-updated document
-        (err, data) => {
-            if (err) return console.log(`Oops! ${err}`);
-            console.log(`data -- ${data.role}`)
-            let returnMsg = `user name : ${matchedName} New role : ${data.role}`;
-            console.log(returnMsg);
-            res.send(returnMsg);
-        });
+ app.post('/updateUserRole', async (req, res) => {
+    const matchedName = req.body.name;
+    const newrole = req.body.role;
+    const isUser = await user.find({firstName: matchedName}).collation( { locale: 'en', strength: 2 } );
+    if(isUser.length === 0) {
+        res.send('No user with that name')
+    } else {
+        user.findOneAndUpdate( {firstName: matchedName}, {role: newrole},
+            { new: true }, //return the updated version instead of the pre-updated document
+            (err, data) => {
+                if (err) return console.log(`Oops! ${err}`);
+                let returnMsg = `user name : ${matchedName} New role : ${data.role}`;
+                res.send(returnMsg);
+            }).collation( { locale: 'en', strength: 2 } );
+    }
  })
+
 app.get('/users', async (req,res) => {
     try {
         const data = await user.find({})
-        res.send(JSON.stringify(data))
+        res.send(`${data.length === 0 ? 'No data' : `<a href='/'>Back</a>${JSON.stringify(data)}`}`)
     } catch(e) {
         res.send('OOOOops')
     }
 })
-app.get('/sortZ-A', async (req,res) => {
-    try {
-        const data = await user.find({}).sort({lastName: 1})
-        res.send(JSON.stringify(data))
-    } catch(e) {
-        res.send('OOOOops')
-    }
-})
+
 app.get('/sortA-Z', async (req,res) => {
     try {
-        const data = await user.find({}).sort({lastName: -1})
-        res.send(JSON.stringify(data))
+        const data = await user.find({}).sort({lastName: 1})
+        res.send(`${data.length === 0 ? 'No data' : `<a href='/'>Back</a>${JSON.stringify(data)}`}`)
     } catch(e) {
         res.send('OOOOops')
     }
 })
- app.post('/removeUser', async (req, res) => {
-     let matchedName = req.body.name;
-     console.log(matchedName)
+
+app.get('/sortZ-A', async (req,res) => {
     try {
-        await user.findOneAndRemove({firstName: matchedName})
-        res.send(`Deleted ${matchedName}`)
-    } catch {
-        res.send('Ooops something went wrong')
+        const data = await user.find({}).sort({lastName: -1})
+        res.send(`${data.length === 0 ? 'No data' : `<a href='/'>Back</a>${JSON.stringify(data)}`}`)
+    } catch(e) {
+        res.send('OOOOops')
     }
- })
+})
+
+app.post('/removeUser', async (req, res) => {
+    let matchedName = req.body.name;
+    const isUser = await user.find({firstName: matchedName}).collation( { locale: 'en', strength: 2 } )
+    try {
+       if(isUser.length != 0) {
+           await user.findOneAndRemove({firstName: matchedName}).collation( { locale: 'en', strength: 2 } )
+           res.send(`Deleted ${matchedName}`)
+       } else {
+           res.send('No user with that name...')
+       }
+   } catch {
+       res.send('Ooops something went wrong')
+   }
+})
 
 app.listen(port, (err) => {
     if (err) console.log(err);
