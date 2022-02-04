@@ -93,7 +93,7 @@ app.get('/users', async (req,res) => {
         res.send('OOOOops')
     }
 })
-app.get('/sortA-Z', async (req,res) => {
+app.get('/sortZ-A', async (req,res) => {
     try {
         const data = await user.find({}).sort({lastName: 1})
         res.send(JSON.stringify(data))
@@ -101,7 +101,7 @@ app.get('/sortA-Z', async (req,res) => {
         res.send('OOOOops')
     }
 })
-app.get('/sortZ-A', async (req,res) => {
+app.get('/sortA-Z', async (req,res) => {
     try {
         const data = await user.find({}).sort({lastName: -1})
         res.send(JSON.stringify(data))
